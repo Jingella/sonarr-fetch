@@ -23,10 +23,18 @@ It was developed to test a number of modules;
 	This is function in the system default 'util' library which converts a standard callback based
 	function into one that returns a promise.
 
+Installation
+------------
+
+Simply clone this repository, this from the root of the repository, type;
+```
+# npm install
+```
+
+This will install all the required node modules (refer to packages.json for details)
 
 Operation
 ---------
-
 
 Call the main entrypoint (./index.js), passing he name of the series to fetch.
 The following command lines arguments are supported;
@@ -39,7 +47,9 @@ be treated specially in a regular expression (such as parenthesis, brackets, ast
 Example
 -------
 
-```# ./index.js the.100```
+```
+# ./index.js the.100
+```
 
 This will locate the TV Series 'The 100', identify if any episodes are missing, and fetch them.
 It will not fetch episodes which are not monitored, it will not fetch episodes which are already queued
