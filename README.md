@@ -16,22 +16,27 @@ It was developed to test a number of modules;
 
 * commander
 
-	This module handles command line parsing.  This is used imply to abstract parameter passing.
+	This module handles command line parsing.  This is used simply to abstract parameter passing.
 
 * util.promisify
 
-	This is function in the system default 'util' library which converts a standard callback based
+	This function in part of the system default 'util' library which converts a regular callback based
 	function into one that returns a promise.
 
 Installation
 ------------
 
-Simply clone this repository, this from the root of the repository, type;
+This script requires NodeJS (and npm) at least release 8.
+
+if you don't already have node and npm installed, I highly recommend using the
+	[Node Version Manager](https://github.com/creationix/nvm) to install and manage node.
+
+Simply clone this repository, then, from the root of the repository, run the node installer;
 ```
 # npm install
 ```
 
-This will install all the required node modules (refer to packages.json for details)
+This will install all the required node modules (refer to packages.json for details).
 
 Operation
 ---------
