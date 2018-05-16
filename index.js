@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+// jshint esversion:6
 // Simple script to scan for a specific tv series, and queue missing episodes.
 
 const Sonarr = require('sonarr-api');
@@ -43,7 +44,7 @@ var series_name = /bob.s burgers/i;
     .then(data=>{
       episode_list = JSON.parse(data);
     }).catch(err => {
-      if( err.code != 'ENOENT' ) {
+      if( err.code !== 'ENOENT' ) {
         console.log('err = ' + err.message);
       }
       episode_list = [];
@@ -55,8 +56,9 @@ var series_name = /bob.s burgers/i;
         //console.log('series = ' + JSON.stringify(wanted,0,4));
         seriesid = wanted.id;
         return sonarr.get("queue");
-      } else
+      } else {
         throw new Error("Series not found: " + series_name);
+      }
     }).then(function(queued) {
       if( queued ) {
         queue = queued.filter(item => item.series.id === seriesid);
@@ -94,8 +96,9 @@ var series_name = /bob.s burgers/i;
       }
     }).then(function (result) {
       //console.log('result -- ' + JSON.stringify(result,0,4));
-      if ( result && result.status == 'queued' ) {
+      if ( result && result.status === 'queued' ) {
         episode_list = episode_list.concat(result.body.episodeIds);
+        //console.log('saving updated episode list' + JSON.stringify(episode_list,0,4));
         return writeFile('episodes.json', JSON.stringify(episode_list));
       }
     }).catch(err => {
