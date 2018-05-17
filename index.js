@@ -10,7 +10,7 @@ const commander = require('commander');
 
 const api_key = 'f5f92e029deb4af48fb1d48fbe020e8c';
 
-var series_name = /bob.s burgers/i;
+var series_name;
 
 (function(){
   "use strict";
@@ -22,6 +22,7 @@ var series_name = /bob.s burgers/i;
   });
 
   var seriesid;
+  var episodeid;
   var queue;
   var episode_list;
   var max_queued;
@@ -49,11 +50,28 @@ var series_name = /bob.s burgers/i;
       }
       episode_list = [];
     }).then(() => {
-      return sonarr.get("series");
+      if ( series_name ) {
+        return sonarr.get("series");
+      } else {
+        return sonarr.get('wanted/missing', {sortKey: 'airDateUtc', sortDir: 'asc'});
+      }
     }).then(function (series) {
-      var wanted = series.find(item => item.title.match(series_name));
+      var wanted;
+      if( series_name ) {
+        wanted = series.find(item => item.title.match(series_name));
+        if( wanted ) {
+          seriesid = wanted.id;
+          return sonarr.get("queue");
+        }
+      } else {
+        wanted = series.records.find(item => !episode_list.find(e => e == item.id));
+        if( wanted ) {
+          seriesid = wanted.series.id;
+          episodeid = wanted.id;
+          return sonarr.get("queue");
+        }
+      }
       if( wanted ) {
-        //console.log('series = ' + JSON.stringify(wanted,0,4));
         seriesid = wanted.id;
         return sonarr.get("queue");
       } else {
@@ -67,7 +85,7 @@ var series_name = /bob.s burgers/i;
         //console.log('queue = ' + JSON.stringify(queue,0,4));
         throw new Error('Items already queued for ' + series_name);
       }
-      if( seriesid ) {
+      if( seriesid && series_name ) {
         return sonarr.get("episode", { seriesId: seriesid });
       }
     }).then(function (episodes) {
@@ -84,9 +102,11 @@ var series_name = /bob.s burgers/i;
           new Date(item.airDateUtc) < today
         ).shift();
         //console.log('episodes --' + JSON.stringify(wanted,0,4));
+      } else if( episodeid ) {
+        wanted = { id: episodeid };
       }
+
       if( wanted ) {
-        //console.log('wanted = '+JSON.stringify(wanted,0,4));
         return sonarr.post("command", {
           name: "EpisodeSearch",
           episodeIds : [
