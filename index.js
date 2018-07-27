@@ -33,6 +33,7 @@ var series_name;
   commander
     .version('0.1.0')
     .option('-m, --max [max]','Maximum number of episodes to queue',2)
+    .option('-a, --anime', 'Select anime', false)
     .parse(process.argv);
 
   if( commander.args.length ) {
@@ -40,6 +41,9 @@ var series_name;
   }
 
   max_queued = commander.max;
+  if( commander.anime ) {
+    sonarr_options.port = 8082;
+  }
 
   var sonarr = new Sonarr(sonarr_options);
 
