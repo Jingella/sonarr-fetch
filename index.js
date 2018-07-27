@@ -14,12 +14,12 @@ var series_name;
 
 (function(){
   "use strict";
-  var sonarr = new Sonarr({
+  var sonarr_options = {
     hostname: 'localhost',
     apiKey: api_key,
     port: 8081,
     urlBase: '/sonarr'
-  });
+  };
 
   var seriesid;
   var episodeid;
@@ -40,6 +40,8 @@ var series_name;
   }
 
   max_queued = commander.max;
+
+  var sonarr = new Sonarr(sonarr_options);
 
   readFile('episodes.json')
     .then(data=>{
