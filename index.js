@@ -70,7 +70,7 @@ var series_name;
           return sonarr.get("queue");
         }
       } else {
-        wanted = series.records.find(item => !episode_list.find(e => e == item.id));
+        wanted = series.records.find(item => !episode_list.find(e => e === item.id));
         if( wanted ) {
           seriesid = wanted.series.id;
           episodeid = wanted.id;
